@@ -31,6 +31,7 @@
      shouldReverse,
      onReverse,
      disabled,
+     movePressed,
      debug,
      animatedViewProps,
      touchableOpacityProps,
@@ -74,9 +75,9 @@
  
    const shouldStartDrag = React.useCallback(
      (gs) => {
-       return !disabled && (Math.abs(gs.dx) > 2 || Math.abs(gs.dy) > 2);
+       return !disabled && movePressed && (Math.abs(gs.dx) > 2 || Math.abs(gs.dy) > 2);
      },
-     [disabled],
+     [disabled, movePressed],
    );
  
    const reversePosition = React.useCallback(() => {
@@ -98,10 +99,10 @@
        }
        if (!shouldReverse) {
          // pan.current.flattenOffset();
-         setTimeout(() => {
+         setImmediate(() => {
            pan.current.setOffset({x: 0, y: 0});
            pan.current.setValue({x: 0, y: 0});
-         }, 150);
+         });
        } else {
          reversePosition();
        }
@@ -296,6 +297,7 @@
    renderSize: 36,
    shouldReverse: false,
    disabled: false,
+   movePressed: true,
    debug: false,
    onDrag: () => {},
    onShortPressRelease: () => {},
